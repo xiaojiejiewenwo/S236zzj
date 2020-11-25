@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Mapper.EmployeeMapper">
+    <resultMap id="EmployeeResultMap" type="entity.Employee">
+        <result property="empName" column="emp_name"/>
+    </resultMap>
+
+<select id="selectAll" resultMap="EmployeeResultMap">
+SELECT id,emp_name,sex,email,birthday,address FROM `t_employee`
+</select>
+    <select id="list" resultMap="EmployeeResultMap">
+      select id,emp_name,sex,email,birthday,address from t_employee
+    </select>
+    <select id="Byid" resultMap="EmployeeResultMap">
+        SELECT id,emp_name,sex,email,birthday,address FROM `t_employee` where id=#{id}
+    </select>
+    <insert id="add" parameterType="entity.Employee">
+        <selectKey keyProperty="id" keyColumn="id" order="AFTER" resultType="Integer">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into t_employee value(null,#{empName},#{sex},#{email},#{birthday},#{address})
+    </insert>
+    <delete id="del" parameterType="Integer">
+        delete from t_employee where id=#{id}
+    </delete>
+    <select id="byname" resultMap="EmployeeResultMap">
+        SELECT id,emp_name,sex,email,birthday,address FROM `t_employee` where emp_name like concat('%',#{empName},'%')
+    </select>
+    <update id="up" parameterType="entity.Employee">
+        update `t_employee` set emp_name=#{empName},sex=#{sex},email=#{email},birthday=#{birthday},address=#{address} where id=#{id}
+    </update>
+</mapper>
